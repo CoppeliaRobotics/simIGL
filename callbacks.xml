@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<?xml-stylesheet type="text/xsl" href="callbacks.xsl"?>
+
+<plugin name="IGL" short-name="IGL" author="federico.ferri.it@gmail.com">
+    <description>Wrapper for libigl</description>
+    <command name="boolean">
+        <description>Compute several boolean operations on the meshes specified by vertices and (triangle) indices</description>
+        <categories>
+            <category name="boolean-ops" />
+        </categories>
+        <params>
+            <param name="a" type="mesh">
+                <description>first mesh</description>
+            </param>
+            <param name="b" type="mesh">
+                <description>second mesh</description>
+            </param>
+            <param name="op" type="int">
+                <description>operation, see <enum-ref name="boolean_op" /></description>
+            </param>
+        </params>
+        <return>
+            <param name="result" type="mesh">
+                <description>resulting mesh</description>
+            </param>
+        </return>
+    </command>
+    <struct name="mesh">
+        <param name="vertices" type="table" item-type="float">
+            <description>vertices of the mesh (3 * n values)</description>
+        </param>
+        <param name="indices" type="table" item-type="int">
+            <description>triangle indices of the mesh (3 * m indices, zero-based)</description>
+        </param>
+        <param name="normals" type="table" item-type="float" nullable="true">
+            <description>per-vertex normals (3 * n values)</description>
+        </param>
+    </struct>
+    <enum name="boolean_op" item-prefix="bool_op_" base="2630">
+        <item name="union" />
+        <item name="intersection" />
+        <item name="difference" />
+        <item name="symmetric_difference" />
+        <item name="resolve" />
+    </enum>
+</plugin>
