@@ -18,6 +18,7 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
     ${LIBPLUGIN_DIR}/cmake)
 find_package(CoppeliaSim 4.1.0.0 REQUIRED)
+find_package(Eigen3 REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GMP REQUIRED IMPORTED_TARGET gmp)
 pkg_check_modules(GMPXX REQUIRED IMPORTED_TARGET gmpxx)
@@ -50,6 +51,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DI
 add_library(simExtIGL SHARED plugin.cpp ${COPPELIASIM_EXPORTED_SOURCES})
 target_link_libraries(simExtIGL ${COPPELIASIM_LIBRARIES})
 target_link_libraries(simExtIGL Boost::system)
+target_link_libraries(simExtIGL Eigen3::Eigen)
 target_link_libraries(simExtIGL PkgConfig::GMP PkgConfig::GMPXX PkgConfig::MPFR)
 target_link_libraries(simExtIGL -ligl -ligl_cgal)
 
