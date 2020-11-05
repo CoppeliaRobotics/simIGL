@@ -38,17 +38,27 @@ if(GIT_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git")
     endif()
 endif()
 
+include(ExternalProject)
+ExternalProject_Add(libigl-build
+    DOWNLOAD_COMMAND ""
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/libigl
+    BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/libigl-build
+    CMAKE_ARGS -DBUILD_TESTING=OFF -DLIBIGL_WITH_CGAL=ON -DLIBIGL_WITH_CORK=OFF -DLIBIGL_WITH_OPENGL=OFF -DLIBIGL_WITH_OPENGL_GLFW=OFF -DLIBIGL_WITH_OPENGL_GLFW_IMGUI=OFF
+    INSTALL_COMMAND ""
+)
+
 include_directories(${COPPELIASIM_INCLUDE_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/generated)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/libigl/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/libigl/external/eigen)
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/libigl/build)
+link_directories(${CMAKE_CURRENT_BINARY_DIR}/libigl-build)
 
 coppeliasim_generate_stubs(${CMAKE_CURRENT_BINARY_DIR}/generated XML_FILE ${CMAKE_CURRENT_SOURCE_DIR}/callbacks.xml LUA_FILE ${CMAKE_CURRENT_SOURCE_DIR}/simExtIGL.lua)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 add_library(simExtIGL SHARED plugin.cpp ${COPPELIASIM_EXPORTED_SOURCES})
+add_dependencies(simExtIGL libigl-build)
 target_link_libraries(simExtIGL ${COPPELIASIM_LIBRARIES})
 target_link_libraries(simExtIGL Boost::system)
 target_link_libraries(simExtIGL Eigen3::Eigen)
