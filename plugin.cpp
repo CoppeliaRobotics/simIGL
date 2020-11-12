@@ -2,6 +2,7 @@
 #include <igl/copyleft/cgal/mesh_boolean.h>
 #include <igl/copyleft/cgal/CSGTree.h>
 #include "simPlusPlus/Plugin.h"
+#include "config.h"
 #include "plugin.h"
 #include "stubs.h"
 
