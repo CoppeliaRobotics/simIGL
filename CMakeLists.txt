@@ -42,7 +42,12 @@ ExternalProject_Add(libigl-build
     DOWNLOAD_COMMAND ""
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/libigl
     BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/libigl-build
-    CMAKE_ARGS -DBUILD_TESTING=OFF -DLIBIGL_WITH_CGAL=ON -DLIBIGL_WITH_CORK=OFF -DLIBIGL_WITH_OPENGL=OFF -DLIBIGL_WITH_OPENGL_GLFW=OFF -DLIBIGL_WITH_OPENGL_GLFW_IMGUI=OFF
+    # macOS: error: no member named 'rayStreamFilterFuncs' in
+    #               namespace 'embree::sse41'; did you mean
+    #               simply 'rayStreamFilterFuncs'?
+    # workaround: -DLIBIGL_WITH_EMBREE=OFF
+    # https://github.com/libigl/libigl/issues/1302
+    CMAKE_ARGS -DBUILD_TESTING=OFF -DLIBIGL_WITH_CGAL=ON -DLIBIGL_WITH_CORK=OFF -DLIBIGL_WITH_OPENGL=OFF -DLIBIGL_WITH_OPENGL_GLFW=OFF -DLIBIGL_WITH_OPENGL_GLFW_IMGUI=OFF -DLIBIGL_WITH_EMBREE=OFF
     INSTALL_COMMAND ""
 )
 
