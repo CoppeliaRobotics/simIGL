@@ -54,7 +54,7 @@ public:
                 m.indices.push_back(F(i, j));
     }
 
-    void boolean(boolean_in *in, boolean_out *out)
+    void meshBoolean(meshBoolean_in *in, meshBoolean_out *out)
     {
         MatrixXd VA, VB, VC;
         MatrixXi FA, FB, FC;

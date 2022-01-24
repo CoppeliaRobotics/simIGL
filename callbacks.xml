@@ -3,7 +3,7 @@
 
 <plugin name="IGL" author="federico.ferri.it@gmail.com">
     <description>Wrapper for libigl</description>
-    <command name="boolean">
+    <command name="meshBoolean">
         <description>Compute several boolean operations on the meshes specified by vertices and (triangle) indices</description>
         <categories>
             <category name="boolean-ops" />
