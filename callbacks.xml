@@ -26,13 +26,13 @@
         </return>
     </command>
     <struct name="mesh">
-        <param name="vertices" type="table" item-type="float">
+        <param name="vertices" type="table" item-type="double">
             <description>vertices of the mesh (3 * n values)</description>
         </param>
         <param name="indices" type="table" item-type="int">
             <description>triangle indices of the mesh (3 * m indices, zero-based)</description>
         </param>
-        <param name="normals" type="table" item-type="float" nullable="true">
+        <param name="normals" type="table" item-type="double" nullable="true">
             <description>per-vertex normals (3 * n values)</description>
         </param>
     </struct>
