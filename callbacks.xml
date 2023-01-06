@@ -25,6 +25,25 @@
             </param>
         </return>
     </command>
+    <command name="randomPointsOnMesh">
+        <description>Randomly sample a mesh n times</description>
+        <params>
+            <param name="n" type="int">
+                <description>num samples</description>
+            </param>
+            <param name="m" type="mesh">
+                <description>mesh</description>
+            </param>
+        </params>
+        <return>
+            <param name="b" type="grid" item-type="double" size="*,3">
+                <description>list of barycentric coordinates, ith row are coordinates of ith sampled point in face FI[i]</description>
+            </param>
+            <param name="fi" type="grid" item-type="int">
+                <description>list of indices into F</description>
+            </param>
+        </return>
+    </command>
     <struct name="mesh">
         <param name="vertices" type="table" item-type="double">
             <description>vertices of the mesh (3 * n values)</description>
