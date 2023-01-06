@@ -34,10 +34,13 @@
             <param name="m" type="mesh">
                 <description>mesh</description>
             </param>
+            <param name="convertToWorldCoords" type="bool" default="false">
+                <description>if true, output will be in world coords and not in barycentric coords</description>
+            </param>
         </params>
         <return>
             <param name="b" type="grid" item-type="double" size="*,3">
-                <description>list of barycentric coordinates, ith row are coordinates of ith sampled point in face FI[i]</description>
+                <description>list of barycentric/world coordinates, ith row are coordinates of ith sampled point in face FI[i]</description>
             </param>
             <param name="fi" type="grid" item-type="int">
                 <description>list of indices into F</description>

@@ -134,6 +134,16 @@ public:
         MatrixXd B;
         MatrixXi FI;
         igl::random_points_on_mesh(in->n, V, F, B, FI);
+        if(in->convertToWorldCoords)
+        {
+            for(int i = 0; i < B.rows(); i++)
+            {
+                B.row(i) =
+                    B(i, 0)*V.row(F(FI(i), 0)) +
+                    B(i, 1)*V.row(F(FI(i), 1)) +
+                    B(i, 2)*V.row(F(FI(i), 2));
+            }
+        }
         writeGrid(B, out->b);
         writeGrid(FI, out->fi);
     }
