@@ -47,6 +47,31 @@
             </param>
         </return>
     </command>
+    <command name="sweptVolume">
+        <description>Generate a volume-sweep mesh</description>
+        <params>
+            <param name="m" type="mesh">
+                <description>mesh</description>
+            </param>
+            <param name="transformFunc" type="string">
+                <description>rigid transform as a function of time (0..1); must return a 4x4 transform matrix as 12/16 values</description>
+            </param>
+            <param name="timeSteps" type="int">
+                <description>number of time steps</description>
+            </param>
+            <param name="gridSize" type="int">
+                <description>size of voxel grid internally used for mesh generation</description>
+            </param>
+            <param name="isoLevel" type="double" default="0">
+                <description>can be set to zero to approximate the exact swept volume, greater than zero to approximate a positive offset of the swept volume or less than zero to approximate a negative offset</description>
+            </param>
+        </params>
+        <return>
+            <param name="m" type="mesh">
+                <description>volume-sweep mesh</description>
+            </param>
+        </return>
+    </command>
     <struct name="mesh">
         <param name="vertices" type="table" item-type="double">
             <description>vertices of the mesh (3 * n values)</description>
@@ -65,4 +90,17 @@
         <item name="symmetric_difference" />
         <item name="resolve" />
     </enum>
+    <script-function name="transformCallback">
+        <description>Callback used by <command-ref name="sweptVolume" />.</description>
+        <params>
+            <param name="t" type="double">
+                <description>time parameter in 0..1 range</description>
+            </param>
+        </params>
+        <return>
+            <param name="transform" type="table" item-type="double">
+                <description>a 4x4 transform matrix as 12/16 values</description>
+            </param>
+        </return>
+    </script-function>
 </plugin>

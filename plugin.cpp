@@ -2,6 +2,7 @@
 #include <igl/copyleft/cgal/mesh_boolean.h>
 #include <igl/copyleft/cgal/CSGTree.h>
 #include <igl/random_points_on_mesh.h>
+#include <igl/swept_volume.h>
 #include "simPlusPlus/Plugin.h"
 #include "config.h"
 #include "plugin.h"
@@ -146,6 +147,29 @@ public:
         }
         writeGrid(B, out->b);
         writeGrid(FI, out->fi);
+    }
+
+    void sweptVolume(sweptVolume_in *in, sweptVolume_out *out)
+    {
+        MatrixXd V, SV;
+        MatrixXi F, SF;
+        readMesh(V, F, in->m);
+        const auto & transform = [=](const double t) -> Eigen::Affine3d
+        {
+            transformCallback_in in1;
+            in1.t = t;
+            transformCallback_out out1;
+            transformCallback(in->_.scriptID, in->transformFunc.c_str(), &in1, &out1);
+            Matrix4d tm;
+            tm << out1.transform[0], out1.transform[1], out1.transform[2], out1.transform[3],
+                  out1.transform[4], out1.transform[5], out1.transform[6], out1.transform[7],
+                  out1.transform[8], out1.transform[9], out1.transform[10], out1.transform[11],
+                  0, 0, 0, 1;
+            Eigen::Affine3d T(tm);
+            return T;
+        };
+        igl::swept_volume(V, F, transform, in->timeSteps, in->gridSize, in->isoLevel, SV, SF);
+        writeMesh(SV, SF, out->m);
     }
 };
 
