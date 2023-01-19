@@ -72,6 +72,31 @@
             </param>
         </return>
     </command>
+    <command name="exactGeodesic">
+        <description>The discrete geodesic distance between two points is the length of the shortest path between then restricted to the surface. For triangle meshes, such a path is made of a set of segments which can be either edges of the mesh or crossing a triangle.</description>
+        <params>
+            <param name="m" type="mesh">
+                <description>mesh</description>
+            </param>
+            <param name="vs" type="table" item-type="int">
+                <description>indices of source vertices</description>
+            </param>
+            <param name="fs" type="table" item-type="int">
+                <description>indices of source faces</description>
+            </param>
+            <param name="vt" type="table" item-type="int">
+                <description>indices of target vertices</description>
+            </param>
+            <param name="ft" type="table" item-type="int">
+                <description>indices of target faces</description>
+            </param>
+        </params>
+        <return>
+            <param name="distances" type="table" item-type="double">
+                <description>output vector which lists first the distances for the target vertices, and then for the target faces</description>
+            </param>
+        </return>
+    </command>
     <struct name="mesh">
         <param name="vertices" type="table" item-type="double">
             <description>vertices of the mesh (3 * n values)</description>

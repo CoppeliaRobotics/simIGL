@@ -3,6 +3,7 @@
 #include <igl/copyleft/cgal/CSGTree.h>
 #include <igl/random_points_on_mesh.h>
 #include <igl/swept_volume.h>
+#include <igl/exact_geodesic.h>
 #include "simPlusPlus/Plugin.h"
 #include "config.h"
 #include "plugin.h"
@@ -29,8 +30,6 @@ public:
             throw runtime_error("vertices must have 3 * n values");
         if(m.indices.size() % 3)
             throw runtime_error("indices must have 3 * n values");
-        if(!m.normals)
-            sim::addLog(sim_verbosity_warnings, "normals not specified");
 
         V.resize(m.vertices.size() / 3, 3);
         for(size_t i = 0, k = 0; i < V.rows(); i++)
@@ -92,6 +91,21 @@ public:
         for(size_t i = 0; i < g.dims[0]; i++)
             for(size_t j = 0; j < g.dims[1]; j++)
                 g.data.push_back(m.coeff(i, j));
+    }
+
+    template<typename T>
+    void readVector(Matrix<T, Dynamic, 1> &m, const std::vector<T> &v)
+    {
+        m.resize(v.size());
+        for(const auto &x : v) m << x;
+    }
+
+    template<typename T>
+    void writeVector(const Matrix<T, Dynamic, 1> &m, std::vector<T> &v)
+    {
+        v.clear();
+        for(size_t i = 0; i < m.rows(); i++)
+            v.push_back(m(i, 0));
     }
 
     void meshBoolean(meshBoolean_in *in, meshBoolean_out *out)
@@ -170,6 +184,21 @@ public:
         };
         igl::swept_volume(V, F, transform, in->timeSteps, in->gridSize, in->isoLevel, SV, SF);
         writeMesh(SV, SF, out->m);
+    }
+
+    void exactGeodesic(exactGeodesic_in *in, exactGeodesic_out *out)
+    {
+        MatrixXd V;
+        MatrixXi F;
+        readMesh(V, F, in->m);
+        Eigen::VectorXi VS, FS, VT, FT;
+        readVector(VS, in->vs);
+        readVector(FS, in->fs);
+        readVector(VT, in->vt);
+        readVector(FT, in->ft);
+        Eigen::VectorXd d;
+        igl::exact_geodesic(V, F, VS, FS, VT, FT, d);
+        writeVector(d, out->distances);
     }
 };
 
