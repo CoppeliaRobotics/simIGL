@@ -97,7 +97,8 @@ public:
     void readVector(Matrix<T, Dynamic, 1> &m, const std::vector<T> &v)
     {
         m.resize(v.size());
-        for(const auto &x : v) m << x;
+        for(size_t i = 0; i < v.size(); i++)
+            m(i, 0) = v.at(i);
     }
 
     template<typename T>
