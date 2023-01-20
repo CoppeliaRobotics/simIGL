@@ -4,6 +4,8 @@
 #include <igl/random_points_on_mesh.h>
 #include <igl/swept_volume.h>
 #include <igl/exact_geodesic.h>
+#include <igl/copyleft/cgal/closest_facet.h>
+#include <igl/upsample.h>
 #include "simPlusPlus/Plugin.h"
 #include "config.h"
 #include "plugin.h"
@@ -169,7 +171,7 @@ public:
         MatrixXd V, SV;
         MatrixXi F, SF;
         readMesh(V, F, in->m);
-        const auto & transform = [=](const double t) -> Eigen::Affine3d
+        const auto & transform = [=](const double t) -> Affine3d
         {
             transformCallback_in in1;
             in1.t = t;
@@ -180,7 +182,7 @@ public:
                   out1.transform[4], out1.transform[5], out1.transform[6], out1.transform[7],
                   out1.transform[8], out1.transform[9], out1.transform[10], out1.transform[11],
                   0, 0, 0, 1;
-            Eigen::Affine3d T(tm);
+            Affine3d T(tm);
             return T;
         };
         igl::swept_volume(V, F, transform, in->timeSteps, in->gridSize, in->isoLevel, SV, SF);
@@ -192,14 +194,40 @@ public:
         MatrixXd V;
         MatrixXi F;
         readMesh(V, F, in->m);
-        Eigen::VectorXi VS, FS, VT, FT;
+        VectorXi VS, FS, VT, FT;
         readVector(VS, in->vs);
         readVector(FS, in->fs);
         readVector(VT, in->vt);
         readVector(FT, in->ft);
-        Eigen::VectorXd d;
+        VectorXd d;
         igl::exact_geodesic(V, F, VS, FS, VT, FT, d);
         writeVector(d, out->distances);
+    }
+
+    void closestFacet(closestFacet_in *in, closestFacet_out *out)
+    {
+        MatrixXd V, P;
+        MatrixXi F;
+        readMesh(V, F, in->m);
+        readGrid(P, in->points);
+        VectorXi I, R, S;
+        readVector(I, in->indices);
+        MatrixXi EMAP, uEC, uEE;
+        if(I.size() > 0)
+            igl::copyleft::cgal::closest_facet(V, F, I, P, EMAP, uEC, uEE, R, S);
+        else
+            igl::copyleft::cgal::closest_facet(V, F, P, EMAP, uEC, uEE, R, S);
+        writeVector(R, out->r);
+        writeVector(S, out->s);
+    }
+
+    void upsample(upsample_in *in, upsample_out *out)
+    {
+        MatrixXd V, NV;
+        MatrixXi F, NF;
+        readMesh(V, F, in->m);
+        igl::upsample(V, F, NV, NF, in->n);
+        writeMesh(NV, NF, out->m);
     }
 };
 

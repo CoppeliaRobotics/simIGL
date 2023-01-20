@@ -97,6 +97,44 @@
             </param>
         </return>
     </command>
+    <command name="closestFacet">
+        <description>Determine the closest facet for each of the input points.</description>
+        <params>
+            <param name="m" type="mesh">
+                <description>mesh</description>
+            </param>
+            <param name="points" type="grid" item-type="double" size="*,3">
+                <description>query points</description>
+            </param>
+            <param name="indices" type="table" item-type="int" default="{}">
+                <description>indices of faces to consider, or empty for all</description>
+            </param>
+        </params>
+        <return>
+            <param name="r" type="table" item-type="int">
+                <description>list of closest face indices, same size as p</description>
+            </param>
+            <param name="s" type="table" item-type="int">
+                <description>list of bools indicating on which side of the facet each query point lies, same size as p</description>
+            </param>
+        </return>
+    </command>
+    <command name="upsample">
+        <description>Subdivide a mesh without moving vertices: loop subdivision but odd vertices stay put and even vertices are just edge midpoints.</description>
+        <params>
+            <param name="m" type="mesh">
+                <description>mesh</description>
+            </param>
+            <param name="n" type="int" default="1">
+                <description>number of subdivisions</description>
+            </param>
+        </params>
+        <return>
+            <param name="m" type="mesh">
+                <description>subdivided mesh</description>
+            </param>
+        </return>
+    </command>
     <struct name="mesh">
         <param name="vertices" type="table" item-type="double">
             <description>vertices of the mesh (3 * n values)</description>
