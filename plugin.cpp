@@ -204,6 +204,18 @@ public:
         writeVector(d, out->distances);
     }
 
+    void uniqueEdgeMap(uniqueEdgeMap_in *in, uniqueEdgeMap_out *out)
+    {
+        MatrixXi F, E, uE, EMAP, uEC, uEE;
+        readGrid(F, in->f);
+        igl::unique_edge_map(F, E, uE, EMAP, uEC, uEE);
+        writeGrid(E, out->e);
+        writeGrid(uE, out->ue);
+        writeGrid(EMAP, out->emap);
+        writeGrid(uEC, out->uec);
+        writeGrid(uEE, out->uee);
+    }
+
     void closestFacet(closestFacet_in *in, closestFacet_out *out)
     {
         MatrixXd V, P;
@@ -213,6 +225,9 @@ public:
         VectorXi I, R, S;
         readVector(I, in->indices);
         MatrixXi EMAP, uEC, uEE;
+        readGrid(EMAP, in->emap);
+        readGrid(uEC, in->uec);
+        readGrid(uEE, in->uee);
         if(I.size() > 0)
             igl::copyleft::cgal::closest_facet(V, F, I, P, EMAP, uEC, uEE, R, S);
         else

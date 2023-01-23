@@ -97,6 +97,31 @@
             </param>
         </return>
     </command>
+    <command name="uniqueEdgeMap">
+        <description>Construct relationships between facet "half"-(or rather "viewed")-edges E to unique edges of the mesh seen as a graph.</description>
+        <params>
+            <param name="f" type="grid" item-type="int" size="*,3">
+                <description>list of simplices</description>
+            </param>
+        </params>
+        <return>
+            <param name="e" type="grid" item-type="int">
+                <description>list of all directed edges, such that E.row(f+#F*c) is the edge opposite F(f,c)</description>
+            </param>
+            <param name="ue" type="grid" item-type="int">
+                <description>list of unique undirected edges</description>
+            </param>
+            <param name="emap" type="grid" item-type="int">
+                <description>list of indices into uE, mapping each directed edge to unique undirected edge so that uE(EMAP(f+#F*c)) is the unique edge corresponding to E.row(f+#F*c)</description>
+            </param>
+            <param name="uec" type="grid" item-type="int">
+                <description>list of cumulative counts of directed edges sharing each unique edge so the uEC(i+1)-uEC(i) is the number of directed edges sharing the ith unique edge</description>
+            </param>
+            <param name="uee" type="grid" item-type="int">
+                <description>list of indices into E, so that the consecutive segment of indices uEE.segment(uEC(i),uEC(i+1)-uEC(i)) lists all directed edges sharing the ith unique edge</description>
+            </param>
+        </return>
+    </command>
     <command name="closestFacet">
         <description>Determine the closest facet for each of the input points.</description>
         <params>
@@ -105,6 +130,15 @@
             </param>
             <param name="points" type="grid" item-type="double" size="*,3">
                 <description>query points</description>
+            </param>
+            <param name="emap" type="grid" item-type="int">
+                <description>list of indices into uE, mapping each directed edge to unique undirected edge so that uE(EMAP(f+#F*c)) is the unique edge corresponding to E.row(f+#F*c)</description>
+            </param>
+            <param name="uec" type="grid" item-type="int">
+                <description>list of cumulative counts of directed edges sharing each unique edge so the uEC(i+1)-uEC(i) is the number of directed edges sharing the ith unique edge</description>
+            </param>
+            <param name="uee" type="grid" item-type="int">
+                <description>list of indices into E, so that the consecutive segment of indices uEE.segment(uEC(i),uEC(i+1)-uEC(i)) lists all directed edges sharing the ith unique edge</description>
             </param>
             <param name="indices" type="table" item-type="int" default="{}">
                 <description>indices of faces to consider, or empty for all</description>
