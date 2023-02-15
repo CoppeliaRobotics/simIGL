@@ -11,18 +11,12 @@ function simIGL.getMesh(h,options)
     return {vertices=v, indices=i}
 end
 
---@fun meshBooleanShape convenience wrapper for simIGL.meshBoolean to operate on shapes directly, also accepting more than 2 shapes, as multiple args or as a single table arg
---@arg int handleA the handle of the first shape
---@arg int handleB the handle of the second shape
+--@fun meshBooleanShape convenience wrapper for simIGL.meshBoolean to operate on shapes directly
+--@arg table.int handles the handle of the input shapes
 --@arg int op the operation (see simIGL.boolean_op)
 --@ret int handleResult the handle of the resulting shape
-function simIGL.meshBooleanShape(...)
-    local arg={...}
-    local op=table.remove(arg,#arg)
-    if type(arg[1])=='table' then
-        if #arg~=1 then error('incorrect number of arguments') end
-        arg=arg[1]
-    end
+function simIGL.meshBooleanShape(handles,op)
+    if #handles<2 then error('not enough input shapes') end
     local function compute(a,b)
         local function blendColor(a,b) return (0.5*(Vector(a)+Vector(b))):data() end
         local m=simIGL.meshBoolean(simIGL.getMesh(a),simIGL.getMesh(b),op)
@@ -40,12 +34,12 @@ function simIGL.meshBooleanShape(...)
         sim.setShapeColor(h,nil,sim.colorcomponent_emission,blendColor(colemA,colemB))
         return h
     end
-    local result=compute(arg[1],arg[2])
-    if #arg>2 then
+    local result=compute(handles[1],handles[2])
+    if #handles>2 then
         local toRemove={}
-        for i=3,#arg do
+        for i=3,#handles do
             table.insert(toRemove,result)
-            result=compute(result,arg[i])
+            result=compute(result,handles[i])
         end
         sim.removeObjects(toRemove)
     end
