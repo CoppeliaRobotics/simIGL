@@ -244,6 +244,38 @@ public:
         igl::upsample(V, F, NV, NF, in->n);
         writeMesh(NV, NF, out->m);
     }
+
+    void centroid(centroid_in *in, centroid_out *out)
+    {
+        MatrixXd V;
+        MatrixXi F;
+        readMesh(V, F, in->m);
+        VectorXd c(3);
+        igl::centroid(V, F, c, out->vol);
+        writeVector(c, out->c);
+    }
+
+    void barycenter(barycenter_in *in, barycenter_out *out)
+    {
+        MatrixXd V, BC;
+        MatrixXi F;
+        readMesh(V, F, in->m);
+        igl::barycenter(V, F, BC);
+        writeGrid(BC, out->bc);
+    }
+
+#if 0
+    void tetrahedralize(tetrahedralize_in *in, tetrahedralize_out *out)
+    {
+        MatrixXd V, TV;
+        MatrixXi F, TT, TF;
+        readMesh(V, F, in->m);
+        out->result = igl::tetrahedralize(V, F, in->switches, TV, TT, TF);
+        writeGrid(TV, out->tv);
+        writeGrid(TT, out->tt);
+        writeGrid(TF, out->tf);
+    }
+#endif
 };
 
 SIM_PLUGIN(PLUGIN_NAME, PLUGIN_VERSION, Plugin)

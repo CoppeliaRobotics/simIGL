@@ -169,6 +169,62 @@
             </param>
         </return>
     </command>
+    <command name="centroid">
+        <description>Computes the centroid of a closed mesh using a surface integral.</description>
+        <params>
+            <param name="m" type="mesh">
+                <description>mesh</description>
+            </param>
+        </params>
+        <return>
+            <param name="c" type="table" item-type="double" size="3">
+                <description>vector of centroid coordinates</description>
+            </param>
+            <param name="vol" type="double">
+                <description>total volume of solid</description>
+            </param>
+        </return>
+    </command>
+    <command name="barycenter">
+        <description>Computes the barycenter of every simplex.</description>
+        <params>
+            <param name="m" type="mesh">
+                <description>mesh</description>
+            </param>
+        </params>
+        <return>
+            <param name="bc" type="grid" item-type="double" size="*,3">
+                <description>matrix of vertices</description>
+            </param>
+        </return>
+    </command>
+    <!--
+    <command name="tetrahedralize">
+        <description>Mesh the interior of a surface mesh using tetgen.</description>
+        <params>
+            <param name="m" type="mesh">
+                <description>mesh</description>
+            </param>
+            <param name="switches" type="string" default='""'>
+                <description>string of tetgen options (See tetgen documentation) e.g. "pq1.414a0.01" tries to mesh the interior of a given surface with quality and area constraints; "" will mesh the convex hull constrained to pass through V (ignores F)</description>
+            </param>
+        </params>
+        <return>
+            <param name="result" type="int">
+                <description>Returns status: 0 success; 1 tetgen threw exception; 2 tetgen did not crash but could not create any tets (probably there are holes, duplicate faces etc.); -1 other error</description>
+            </param>
+            <param name="tv" type="grid" item-type="double" size="*,3">
+                <description>vertex position list</description>
+            </param>
+            <param name="tt" type="grid" item-type="double" size="*,4">
+                <description>list of tet face indices</description>
+            </param>
+            <param name="tf" type="grid" item-type="double" size="*,3">
+                <description>list of triangle face indices</description>
+            </param>
+        </return>
+    </command>
+    -->
     <struct name="mesh">
         <param name="vertices" type="table" item-type="double">
             <description>vertices of the mesh (3 * n values)</description>
