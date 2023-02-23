@@ -225,6 +225,19 @@
         </return>
     </command>
     -->
+    <command name="convexHull">
+        <description>Given a set of points, compute the convex hull as a triangle mesh.</description>
+        <params>
+            <param name="points" type="table" item-type="double">
+                <description>mesh</description>
+            </param>
+        </params>
+        <return>
+            <param name="m" type="mesh">
+                <description>mesh</description>
+            </param>
+        </return>
+    </command>
     <struct name="mesh">
         <param name="vertices" type="table" item-type="double">
             <description>vertices of the mesh (3 * n values)</description>

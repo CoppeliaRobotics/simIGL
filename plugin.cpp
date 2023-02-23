@@ -9,6 +9,7 @@
 #include <igl/centroid.h>
 #include <igl/barycenter.h>
 //#include <igl/copyleft/tetgen/tetrahedralize.h>
+#include <igl/copyleft/cgal/convex_hull.h>
 #include <simPlusPlus/Plugin.h>
 #include "config.h"
 #include "plugin.h"
@@ -279,6 +280,16 @@ public:
         writeGrid(TF, out->tf);
     }
 #endif
+
+    void convexHull(convexHull_in *in, convexHull_out *out)
+    {
+        VectorXd V;
+        readVector(V, in->points);
+        MatrixXd W;
+        MatrixXi G;
+        igl::copyleft::cgal::convex_hull(V, W, G);
+        writeMesh(W, G, out->m);
+    }
 };
 
 SIM_PLUGIN(PLUGIN_NAME, PLUGIN_VERSION, Plugin)
