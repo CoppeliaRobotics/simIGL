@@ -258,6 +258,19 @@
             </param>
         </return>
     </command>
+    <command name="volume">
+        <description>Compute volume for all tets of a given tet mesh.</description>
+        <params>
+            <param name="m" type="tetmesh">
+                <description>tet mesh</description>
+            </param>
+        </params>
+        <return>
+            <param name="vol" type="table" item-type="double">
+                <description>list of tetrahedron volumes</description>
+            </param>
+        </return>
+    </command>
     <struct name="mesh">
         <param name="vertices" type="table" item-type="double">
             <description>vertices of the mesh (3 * n values)</description>
@@ -267,6 +280,14 @@
         </param>
         <param name="normals" type="table" item-type="double" nullable="true">
             <description>per-vertex normals (3 * n values)</description>
+        </param>
+    </struct>
+    <struct name="tetmesh">
+        <param name="vertices" type="table" item-type="double">
+            <description>vertices of the mesh (3 * n values)</description>
+        </param>
+        <param name="indices" type="table" item-type="int">
+            <description>tetrahedra indices of the mesh (4 * m indices, zero-based)</description>
         </param>
     </struct>
     <enum name="boolean_op" item-prefix="bool_op_" base="2630">

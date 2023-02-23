@@ -11,6 +11,7 @@
 #include <igl/copyleft/tetgen/tetrahedralize.h>
 #include <igl/copyleft/cgal/convex_hull.h>
 #include <igl/copyleft/cgal/intersect_with_half_space.h>
+#include <igl/volume.h>
 #include <simPlusPlus/Plugin.h>
 #include "config.h"
 #include "plugin.h"
@@ -60,6 +61,24 @@ public:
         for(size_t i = 0; i < F.rows(); i++)
             for(size_t j = 0; j < F.cols(); j++)
                 m.indices.push_back(F(i, j));
+    }
+
+    void readTetMesh(MatrixXd &V, MatrixXi &T, const tetmesh &m)
+    {
+        if(m.vertices.size() % 3)
+            throw runtime_error("vertices must have 3 * n values");
+        if(m.indices.size() % 4)
+            throw runtime_error("indices must have 4 * n values");
+
+        V.resize(m.vertices.size() / 3, 3);
+        for(size_t i = 0, k = 0; i < V.rows(); i++)
+            for(size_t j = 0; j < V.cols(); j++)
+                V(i, j) = m.vertices.at(k++);
+
+        T.resize(m.indices.size() / 4, 4);
+        for(size_t i = 0, k = 0; i < T.rows(); i++)
+            for(size_t j = 0; j < T.cols(); j++)
+                T(i, j) = m.indices.at(k++);
     }
 
     template<typename T>
@@ -305,6 +324,16 @@ public:
         igl::copyleft::cgal::intersect_with_half_space(V, F, p, n, VC, FC, J);
         writeMesh(VC, FC, out->m);
         writeVector(J, out->j);
+    }
+
+    void volume(volume_in *in, volume_out *out)
+    {
+        MatrixXd V;
+        MatrixXi T;
+        readTetMesh(V, T, in->m);
+        VectorXd vol;
+        igl::volume(V, T, vol);
+        writeVector(vol, out->vol);
     }
 };
 
