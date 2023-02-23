@@ -34,7 +34,6 @@ end
 
 --@fun convexHullShape convenience wrapper for simIGL.convexHull to operate on shapes directly
 --@arg table.int handles the handle of the input shapes
---@arg int op the operation (see simIGL.boolean_op)
 --@ret int handleResult the handle of the resulting shape
 function simIGL.convexHullShape(handles)
     local vert={}

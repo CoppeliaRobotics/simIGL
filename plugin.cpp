@@ -290,7 +290,7 @@ public:
             throw runtime_error("points must have 3n values");
         MatrixXd W;
         MatrixXi G;
-        igl::copyleft::cgal::convex_hull(V.reshaped(n / 3, 3), W, G);
+        igl::copyleft::cgal::convex_hull(V.reshaped<RowMajor>(n / 3, 3), W, G);
         writeMesh(W, G, out->m);
     }
 };
