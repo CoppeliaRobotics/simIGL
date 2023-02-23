@@ -188,8 +188,11 @@
     <command name="barycenter">
         <description>Computes the barycenter of every simplex.</description>
         <params>
-            <param name="m" type="mesh">
-                <description>mesh</description>
+            <param name="v" type="grid" item-type="double" size="*,3">
+                <description>vertex position list</description>
+            </param>
+            <param name="f" type="grid" item-type="int" size="*,4">
+                <description>indices of simplex corners into V</description>
             </param>
         </params>
         <return>

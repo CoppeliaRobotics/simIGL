@@ -283,7 +283,8 @@ public:
     {
         MatrixXd V, BC;
         MatrixXi F;
-        readMesh(V, F, in->m);
+        readGrid(V, in->v);
+        readGrid(F, in->f);
         igl::barycenter(V, F, BC);
         writeGrid(BC, out->bc);
     }
