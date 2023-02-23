@@ -8,7 +8,7 @@
 #include <igl/upsample.h>
 #include <igl/centroid.h>
 #include <igl/barycenter.h>
-//#include <igl/copyleft/tetgen/tetrahedralize.h>
+#include <igl/copyleft/tetgen/tetrahedralize.h>
 #include <igl/copyleft/cgal/convex_hull.h>
 #include <simPlusPlus/Plugin.h>
 #include "config.h"
@@ -268,18 +268,16 @@ public:
         writeGrid(BC, out->bc);
     }
 
-#if 0
     void tetrahedralize(tetrahedralize_in *in, tetrahedralize_out *out)
     {
         MatrixXd V, TV;
         MatrixXi F, TT, TF;
         readMesh(V, F, in->m);
-        out->result = igl::tetrahedralize(V, F, in->switches, TV, TT, TF);
+        out->result = igl::copyleft::tetgen::tetrahedralize(V, F, in->switches, TV, TT, TF);
         writeGrid(TV, out->tv);
         writeGrid(TT, out->tt);
         writeGrid(TF, out->tf);
     }
-#endif
 
     void convexHull(convexHull_in *in, convexHull_out *out)
     {

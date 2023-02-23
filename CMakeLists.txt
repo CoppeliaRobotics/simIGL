@@ -39,6 +39,7 @@ ExternalProject_Add(libigl-build
         -DLIBIGL_BUILD_TESTS=OFF
         -DLIBIGL_BUILD_TUTORIALS=OFF
         -DLIBIGL_COPYLEFT_CGAL=ON
+        -DLIBIGL_COPYLEFT_TETGEN=ON
         -DLIBIGL_EMBREE=OFF
         -DLIBIGL_GLFW=OFF
         -DLIBIGL_IMGUI=OFF
@@ -51,6 +52,7 @@ ExternalProject_Add(libigl-build
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/generated)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/libigl/include)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/libigl-build/_deps/tetgen-src)
 link_directories(${CMAKE_CURRENT_BINARY_DIR}/libigl-build/lib)
 
 coppeliasim_generate_stubs(${CMAKE_CURRENT_BINARY_DIR}/generated XML_FILE ${CMAKE_CURRENT_SOURCE_DIR}/callbacks.xml LUA_FILE ${CMAKE_CURRENT_SOURCE_DIR}/simIGL.lua)
@@ -62,4 +64,4 @@ add_dependencies(simExtIGL libigl-build)
 target_link_libraries(simExtIGL Boost::system)
 target_link_libraries(simExtIGL Eigen3::Eigen)
 target_link_libraries(simExtIGL PkgConfig::GMP PkgConfig::GMPXX PkgConfig::MPFR)
-target_link_libraries(simExtIGL igl igl_copyleft_cgal)
+target_link_libraries(simExtIGL igl igl_copyleft_cgal igl_copyleft_tetgen tetgen)

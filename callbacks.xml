@@ -198,7 +198,6 @@
             </param>
         </return>
     </command>
-    <!--
     <command name="tetrahedralize">
         <description>Mesh the interior of a surface mesh using tetgen.</description>
         <params>
@@ -216,15 +215,14 @@
             <param name="tv" type="grid" item-type="double" size="*,3">
                 <description>vertex position list</description>
             </param>
-            <param name="tt" type="grid" item-type="double" size="*,4">
+            <param name="tt" type="grid" item-type="int" size="*,4">
                 <description>list of tet face indices</description>
             </param>
-            <param name="tf" type="grid" item-type="double" size="*,3">
+            <param name="tf" type="grid" item-type="int" size="*,3">
                 <description>list of triangle face indices</description>
             </param>
         </return>
     </command>
-    -->
     <command name="convexHull">
         <description>Given a set of points, compute the convex hull as a triangle mesh.</description>
         <params>
