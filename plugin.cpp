@@ -6,6 +6,9 @@
 #include <igl/exact_geodesic.h>
 #include <igl/copyleft/cgal/closest_facet.h>
 #include <igl/upsample.h>
+#include <igl/centroid.h>
+#include <igl/barycenter.h>
+//#include <igl/copyleft/tetgen/tetrahedralize.h>
 #include <simPlusPlus/Plugin.h>
 #include "config.h"
 #include "plugin.h"
