@@ -10,6 +10,7 @@
 #include <igl/barycenter.h>
 #include <igl/copyleft/tetgen/tetrahedralize.h>
 #include <igl/copyleft/cgal/convex_hull.h>
+#include <igl/copyleft/cgal/intersect_with_half_space.h>
 #include <simPlusPlus/Plugin.h>
 #include "config.h"
 #include "plugin.h"
@@ -290,6 +291,20 @@ public:
         MatrixXi G;
         igl::copyleft::cgal::convex_hull(V.reshaped<RowMajor>(n / 3, 3), W, G);
         writeMesh(W, G, out->m);
+    }
+
+    void intersectWithHalfSpace(intersectWithHalfSpace_in *in, intersectWithHalfSpace_out *out)
+    {
+        MatrixXd V, VC;
+        MatrixXi F, FC;
+        readMesh(V, F, in->m);
+        VectorXd p, n;
+        readVector(p, in->pt);
+        readVector(n, in->n);
+        VectorXi J;
+        igl::copyleft::cgal::intersect_with_half_space(V, F, p, n, VC, FC, J);
+        writeMesh(VC, FC, out->m);
+        writeVector(J, out->j);
     }
 };
 

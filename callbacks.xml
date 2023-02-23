@@ -236,6 +236,28 @@
             </param>
         </return>
     </command>
+    <command name="intersectWithHalfSpace">
+        <description>Intersect a PWN mesh with a half-space. Point on plane, normal pointing outward.</description>
+        <params>
+            <param name="m" type="mesh">
+                <description>mesh</description>
+            </param>
+            <param name="pt" type="table" item-type="double" size="3">
+                <description>point on plane</description>
+            </param>
+            <param name="n" type="table" item-type="double" size="3">
+                <description>normal of plane pointing away from inside</description>
+            </param>
+        </params>
+        <return>
+            <param name="m" type="mesh">
+                <description>result mesh</description>
+            </param>
+            <param name="j" type="table" item-type="int">
+                <description>list of indices into [F;F.rows()+[1;2]] revealing "birth" facet</description>
+            </param>
+        </return>
+    </command>
     <struct name="mesh">
         <param name="vertices" type="table" item-type="double">
             <description>vertices of the mesh (3 * n values)</description>
