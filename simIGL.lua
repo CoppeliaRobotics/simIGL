@@ -32,4 +32,49 @@ function simIGL.meshBooleanShape(handles,op)
     return result
 end
 
+--@fun convexHullShape convenience wrapper for simIGL.convexHull to operate on shapes directly
+--@arg table.int handles the handle of the input shapes
+--@arg int op the operation (see simIGL.boolean_op)
+--@ret int handleResult the handle of the resulting shape
+function simIGL.convexHullShape(handles)
+    local vert={}
+    local edges=1
+    local colorAD,colorSp,colorEm=nil,nil,nil
+    for i,h in ipairs(handles) do
+        local toadd={}
+        local t=sim.getObjectType(h)
+        if t==sim.object_shape_type then
+            edges=edges*sim.getObjectInt32Param(h,sim.shapeintparam_edge_visibility)
+            if not colorAD then
+                _,colorAD=sim.getShapeColor(h,nil,sim.colorcomponent_ambient_diffuse)
+                _,colorSp=sim.getShapeColor(h,nil,sim.colorcomponent_specular)
+                _,colorEm=sim.getShapeColor(h,nil,sim.colorcomponent_emission)
+            end
+            local m=simIGL.getMesh(h)
+            toadd=m.vertices
+        elseif t==sim.object_dummy_type then
+            toadd=sim.getObjectType(h,sim.handle_world)
+        else
+            error('unsupported object type')
+        end
+        if #vert>0 then
+            for _,x in ipairs(toadd) do
+                table.insert(vert,x)
+            end
+        else
+            vert=toadd
+        end
+    end
+    if #vert==0 then error('empty input') end
+    colorAD=colorAD or {0.85,0.85,0.85}
+    colorSp=colorSp or {0,0,0}
+    colorEm=colorEm or {0,0,0}
+    local m=simIGL.convexHull(vert)
+    local h=sim.createMeshShape(1+2*edges,math.pi/8,m.vertices,m.indices)
+    sim.setShapeColor(h,nil,sim.colorcomponent_ambient_diffuse,colorAD)
+    sim.setShapeColor(h,nil,sim.colorcomponent_specular,colorSp)
+    sim.setShapeColor(h,nil,sim.colorcomponent_emission,colorEm)
+    return h
+end
+
 return simIGL
