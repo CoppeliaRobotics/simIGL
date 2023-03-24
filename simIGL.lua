@@ -21,6 +21,7 @@ function simIGL.meshBooleanShape(handles,op)
     local result=simIGL.meshBoolean(meshes[1],meshes[2],op)
     for i=3,#meshes do result=simIGL.meshBoolean(result,meshes[i],op) end
     local edges=sim.getObjectInt32Param(handles[1],sim.shapeintparam_edge_visibility)
+    local culling=sim.getObjectInt32Param(handles[1],sim.shapeintparam_culling)
     result=sim.createMeshShape(1+2*edges,math.pi/8,result.vertices,result.indices)
     local _,colad=sim.getShapeColor(handles[1],nil,sim.colorcomponent_ambient_diffuse)
     sim.setShapeColor(result,nil,sim.colorcomponent_ambient_diffuse,colad)
@@ -29,6 +30,7 @@ function simIGL.meshBooleanShape(handles,op)
     local _,colem=sim.getShapeColor(handles[1],nil,sim.colorcomponent_emission)
     sim.setShapeColor(result,nil,sim.colorcomponent_emission,colem)
     sim.reorientShapeBoundingBox(result,sim.handle_world)
+    sim.setObjectInt32Param(result,sim.shapeintparam_culling,culling)
     return result
 end
 
