@@ -22,6 +22,7 @@ function simIGL.meshBooleanShape(handles,op)
     for i=3,#meshes do result=simIGL.meshBoolean(result,meshes[i],op) end
     local edges=sim.getObjectInt32Param(handles[1],sim.shapeintparam_edge_visibility)
     local culling=sim.getObjectInt32Param(handles[1],sim.shapeintparam_culling)
+    if #result.vertices==0 then return end
     result=sim.createMeshShape(1+2*edges,math.pi/8,result.vertices,result.indices)
     local _,colad=sim.getShapeColor(handles[1],nil,sim.colorcomponent_ambient_diffuse)
     sim.setShapeColor(result,nil,sim.colorcomponent_ambient_diffuse,colad)
