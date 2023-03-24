@@ -4,6 +4,11 @@ project(simExtIGL)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_MACOSX_RPATH 1)
 
+if(MSVC)
+    # fix C1128: number of sections exceeded object file format limit
+    add_compile_options(/bigobj)
+endif()
+
 find_package(Boost REQUIRED COMPONENTS system)
 
 if(NOT COPPELIASIM_INCLUDE_DIR)
