@@ -313,7 +313,7 @@ public:
         auto Vr = V.reshaped<RowMajor>(n / 3, 3);
 #else
         Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> Vr(n / 3, 3);
-        auto Vr = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(V.data(), n / 3, 3);
+        Vr = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(V.data(), n / 3, 3);
 #endif
         igl::copyleft::cgal::convex_hull(Vr, W, G);
         writeMesh(W, G, out->m);
