@@ -309,7 +309,13 @@ public:
             throw runtime_error("points must have 3n values");
         MatrixXd W;
         MatrixXi G;
-        igl::copyleft::cgal::convex_hull(V.reshaped<RowMajor>(n / 3, 3), W, G);
+#if EIGEN_VERSION_AT_LEAST(3,4,0)
+        auto Vr = V.reshaped<RowMajor>(n / 3, 3);
+#else
+        Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> Vr(n / 3, 3);
+        auto Vr = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(V.data(), n / 3, 3);
+#endif
+        igl::copyleft::cgal::convex_hull(Vr, W, G);
         writeMesh(W, G, out->m);
     }
 
