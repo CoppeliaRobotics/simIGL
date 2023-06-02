@@ -1,4 +1,4 @@
-local simIGL=loadPlugin'simIGL'
+local simIGL=loadPlugin'simIGL';
 
 --@fun getMesh get mesh data of a given shape in the format used by simIGL functions
 --@arg int h the handle of the shape
@@ -79,6 +79,6 @@ function simIGL.convexHullShape(handles)
     return h
 end
 
-(require'simIGL-typecheck')(simIGL)
+;(require'simIGL-typecheck')(simIGL)
 
 return simIGL
