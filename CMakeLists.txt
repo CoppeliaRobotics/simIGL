@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
-project(simExtIGL)
+project(simIGL)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_MACOSX_RPATH 1)
@@ -64,9 +64,9 @@ coppeliasim_generate_stubs(${CMAKE_CURRENT_BINARY_DIR}/generated XML_FILE ${CMAK
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-coppeliasim_add_plugin(simExtIGL SOURCES plugin.cpp)
-add_dependencies(simExtIGL libigl-build)
-target_link_libraries(simExtIGL Boost::system)
-target_link_libraries(simExtIGL Eigen3::Eigen)
-target_link_libraries(simExtIGL PkgConfig::GMP PkgConfig::GMPXX PkgConfig::MPFR)
-target_link_libraries(simExtIGL igl igl_copyleft_cgal igl_copyleft_tetgen tetgen)
+coppeliasim_add_plugin(simIGL SOURCES plugin.cpp)
+add_dependencies(simIGL libigl-build)
+target_link_libraries(simIGL Boost::system)
+target_link_libraries(simIGL Eigen3::Eigen)
+target_link_libraries(simIGL PkgConfig::GMP PkgConfig::GMPXX PkgConfig::MPFR)
+target_link_libraries(simIGL igl igl_copyleft_cgal igl_copyleft_tetgen tetgen)

@@ -23,7 +23,7 @@ using namespace Eigen;
 class Plugin : public sim::Plugin
 {
 public:
-    void onStart()
+    void onInit()
     {
         if(!registerScriptStuff())
             throw runtime_error("failed to register script stuff");
