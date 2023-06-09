@@ -146,19 +146,19 @@ public:
         igl::MeshBooleanType t = igl::NUM_MESH_BOOLEAN_TYPES;
         switch(in->op)
         {
-        case sim_igl_bool_op_union:
+        case simigl_bool_op_union:
             t = igl::MESH_BOOLEAN_TYPE_UNION;
             break;
-        case sim_igl_bool_op_intersection:
+        case simigl_bool_op_intersection:
             t = igl::MESH_BOOLEAN_TYPE_INTERSECT;
             break;
-        case sim_igl_bool_op_difference:
+        case simigl_bool_op_difference:
             t = igl::MESH_BOOLEAN_TYPE_MINUS;
             break;
-        case sim_igl_bool_op_symmetric_difference:
+        case simigl_bool_op_symmetric_difference:
             t = igl::MESH_BOOLEAN_TYPE_XOR;
             break;
-        case sim_igl_bool_op_resolve:
+        case simigl_bool_op_resolve:
             t = igl::MESH_BOOLEAN_TYPE_RESOLVE;
             break;
         }
@@ -344,5 +344,5 @@ public:
     }
 };
 
-SIM_PLUGIN(PLUGIN_NAME, PLUGIN_VERSION, Plugin)
+SIM_PLUGIN(Plugin)
 #include "stubsPlusPlus.cpp"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <?xml-stylesheet type="text/xsl" href="callbacks.xsl"?>
 
-<plugin name="IGL" author="federico.ferri.it@gmail.com">
+<plugin name="simIGL" author="federico.ferri.it@gmail.com">
     <description>Wrapper for libigl</description>
     <command name="meshBoolean">
         <description>Compute several boolean operations on the meshes specified by vertices and (triangle) indices</description>
