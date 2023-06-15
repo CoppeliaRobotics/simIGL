@@ -6,7 +6,7 @@ local simIGL=loadPlugin'simIGL';
 --@ret table mesh mesh object
 function simIGL.getMesh(h,options)
     local v,i,n=sim.getShapeMesh(h)
-    local m=sim.getObjectMatrix(h,-1)
+    local m=sim.getObjectMatrix(h)
     v=sim.multiplyVector(m,v)
     return {vertices=v, indices=i}
 end
