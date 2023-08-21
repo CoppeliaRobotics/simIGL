@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.16.3)
 project(simIGL)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -66,7 +66,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DI
 
 coppeliasim_add_plugin(simIGL SOURCES plugin.cpp)
 add_dependencies(simIGL libigl-build)
-target_link_libraries(simIGL Boost::system)
-target_link_libraries(simIGL Eigen3::Eigen)
-target_link_libraries(simIGL PkgConfig::GMP PkgConfig::GMPXX PkgConfig::MPFR)
-target_link_libraries(simIGL igl igl_copyleft_cgal igl_copyleft_tetgen tetgen)
+target_link_libraries(simIGL PRIVATE Boost::system)
+target_link_libraries(simIGL PRIVATE Eigen3::Eigen)
+target_link_libraries(simIGL PRIVATE PkgConfig::GMP PkgConfig::GMPXX PkgConfig::MPFR)
+target_link_libraries(simIGL PRIVATE igl igl_copyleft_cgal igl_copyleft_tetgen tetgen)
