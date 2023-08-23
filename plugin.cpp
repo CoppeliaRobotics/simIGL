@@ -175,7 +175,8 @@ public:
         readMesh(V, F, in->m);
         MatrixXd B;
         MatrixXi FI;
-        igl::random_points_on_mesh(in->n, V, F, B, FI);
+        MatrixXd X;
+        igl::random_points_on_mesh(in->n, V, F, B, FI, X);
         if(in->convertToWorldCoords)
         {
             for(int i = 0; i < B.rows(); i++)
