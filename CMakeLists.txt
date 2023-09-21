@@ -31,7 +31,7 @@ pkg_check_modules(MPFR REQUIRED IMPORTED_TARGET mpfr)
 include(ExternalProject)
 ExternalProject_Add(libigl-build
     GIT_REPOSITORY https://github.com/libigl/libigl
-    GIT_TAG main
+    GIT_TAG b1fe6ba49c06075372ef90a70c785e96cd044772
     SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/libigl
     BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/libigl-build
     # macOS: error: no member named 'rayStreamFilterFuncs' in
