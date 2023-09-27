@@ -39,7 +39,8 @@ ExternalProject_Add(libigl-build
     #               simply 'rayStreamFilterFuncs'?
     # workaround: -DLIBIGL_EMBREE=OFF
     # https://github.com/libigl/libigl/issues/1302
-    CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+    CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+        -DCMAKE_BUILD_TYPE=Release
         -DBUILD_TESTING=OFF
         -DLIBIGL_BUILD_TESTS=OFF
         -DLIBIGL_BUILD_TUTORIALS=OFF
