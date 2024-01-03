@@ -12,5 +12,3 @@ All rights reserved.
 GNU LPGL V3, see here for details:
 https://www.gnu.org/licenses/lgpl-3.0.html
 -----------------------------------------------------------------------
-
-The IGL plugin is courtesy of Federico Ferri.
