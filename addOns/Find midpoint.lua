@@ -9,26 +9,40 @@ function sysCall_init()
     if sim.getSimulationState() ~= sim.simulation_stopped then return {cmd = 'cleanup'} end
     sim.addLog(
         sim.verbosity_scriptinfos,
-        "This tool finds midpoint between first clicked vertex/dummy and second clicked vertex/dummy. Hold shift to create two evenly spaced midpoints. Use sim.setNamedInt32Param('findMidpoint.n',3) to change the number of midpoints created when shift is held to e.g. 3."
+        "This tool finds midpoint between two objects (start the addon with the two objects selected) or between two points (first clicked vertex/dummy and second clicked vertex/dummy). Hold shift to create two evenly spaced midpoints. Use sim.setNamedInt32Param('findMidpoint.n',3) to change the number of midpoints created when shift is held to e.g. 3."
     )
-    sim.broadcastMsg {
-        id = 'pointSampler.enable',
-        data = {
-            key = 'findMidpoint',
-            vertex = true,
-            dummy = true,
-            snapToClosest = true,
-            hover = true,
-        },
-    }
-    pts = sim.addDrawingObject(
-              sim.drawing_spherepts | sim.drawing_itemsizes, 0.01, 0, -1, 100, {1, 0, 0}
-          )
+
+    -- start with two objects selected to compute the midpoint between those two
+    local sel = sim.getObjectSel()
+    if #sel == 2 then
+        local firstPoint = Vector(sim.getObjectPosition(sel[1]))
+        local secondPoint = Vector(sim.getObjectPosition(sel[2]))
+        local objs = makeMidpoints(firstPoint, secondPoint)
+        sim.setObjectSel(objs)
+        return {cmd = 'cleanup'}
+    elseif #sel == 0 then
+        interactive = true
+        sim.broadcastMsg {
+            id = 'pointSampler.enable',
+            data = {
+                key = 'findMidpoint',
+                vertex = true,
+                dummy = true,
+                snapToClosest = true,
+                hover = true,
+            },
+        }
+        pts = sim.addDrawingObject(sim.drawing_spherepts | sim.drawing_itemsizes, 0.01, 0, -1, 100, {1, 0, 0})
+    else
+        error 'Incorrect number of objects selected'
+    end
 end
 
 function sysCall_cleanup()
-    sim.removeDrawingObject(pts)
-    sim.broadcastMsg {id = 'pointSampler.disable', data = {key = 'findMidpoint'}}
+    if interactive then
+        sim.removeDrawingObject(pts)
+        sim.broadcastMsg {id = 'pointSampler.disable', data = {key = 'findMidpoint'}}
+    end
 end
 
 function sysCall_addOnScriptSuspend()
@@ -55,12 +69,7 @@ function sysCall_msg(event)
             }
         else
             secondPoint = Vector(point)
-            for i, m in ipairs(getMidpoints(firstPoint, secondPoint)) do
-                dummy = sim.createDummy(0.01)
-                sim.setObjectAlias(dummy, 'Midpoint')
-                sim.setObjectMatrix(dummy, m)
-            end
-            sim.announceSceneContentChange()
+            makeMidpoints(firstPoint, secondPoint)
             return {cmd = 'cleanup'}
         end
     elseif event.id == 'pointSampler.hover' and firstPoint then
@@ -126,4 +135,16 @@ function getMidpoints(a, b)
         table.insert(midPoints, pointNormalToMatrix(midPoint, d:normalized()))
     end
     return midPoints
+end
+
+function makeMidpoints(a, b)
+    local objs = {}
+    for i, m in ipairs(getMidpoints(a, b)) do
+        dummy = sim.createDummy(0.01)
+        sim.setObjectAlias(dummy, 'Midpoint')
+        sim.setObjectMatrix(dummy, m)
+        table.insert(objs, dummy)
+    end
+    sim.announceSceneContentChange()
+    return objs
 end
