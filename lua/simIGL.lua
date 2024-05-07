@@ -77,6 +77,65 @@ function simIGL.convexHullShape(handles)
     return h
 end
 
+-- @fun pointNormalToMatrix return the transform matrix (table of 12 values) from point and normal
+-- @arg table point (3D vector)
+-- @arg table normal (3D vector)
+-- @ret table matrix the resulting transform matrix (table of 12 values)
+function simIGL.pointNormalToMatrix(point, normal)
+    local m = sim.buildIdentityMatrix()
+    m[4] = point[1]
+    m[8] = point[2]
+    m[12] = point[3]
+    if normal[1] < 0.99 then
+        local z = Vector3(normal):normalized()
+        local x = Vector3({1, 0, 0})
+        local y = z:cross(x):normalized()
+        local x = y:cross(z)
+        m[1] = x[1]; m[5] = x[2]; m[9] = x[3];
+        m[2] = y[1]; m[6] = y[2]; m[10] = y[3];
+        m[3] = z[1]; m[7] = z[2]; m[11] = z[3];
+    else
+        m[1] = 0; m[5] = 1; m[9] = 0;
+        m[2] = 0; m[6] = 0; m[10] = 1;
+        m[3] = 1; m[7] = 0; m[11] = 0;
+    end
+    return m
+end
+
+-- @fun rayTest perform a ray test, from given origin towards every of the points, and return a new array of points.
+-- @arg table origin (3D vector)
+-- @arg table points one or more points to test
+-- @arg {type=int,nullable=true,default=NIL} proximitySensorHandle handle of a ray type proximity sensor, or nil in which case it will be created
+-- @ret table resultPoints the resulting points of the ray test
+function simIGL.rayTest(origin, points, proximitySensorHandle)
+    local removeSensor = false
+    if proximitySensorHandle == nil then
+        local zoffset = 0
+        local zrange = 10
+        proximitySensorHandle = sim.createProximitySensor(
+            sim.proximitysensor_ray_subtype, 16, 0
+            +1 -- the sensor will be explicitly handled
+            +4 -- the detection volume is not shown
+            , {0, 0, 0, 0, 0, 0, 0, 0}
+            , {zoffset, zrange, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+        )
+        removeSensor = true
+    end
+    local originVec = Vector(origin)
+    local result = {}
+    for i, point in ipairs(table.batched(points, 3)) do
+        local m = simIGL.pointNormalToMatrix(origin, (Vector(point) - originVec):normalized())
+        sim.setObjectMatrix(proximitySensorHandle, m)
+        local r, d, pt, h, n = sim.handleProximitySensor(proximitySensorHandle)
+        pt = sim.multiplyVector(m, pt)
+        for _, x in ipairs(pt) do table.insert(result, x) end
+    end
+    if removeSensor then
+        sim.removeObjects {proximitySensorHandle}
+    end
+    return result
+end
+
 (require 'simIGL-typecheck')(simIGL)
 
 return simIGL

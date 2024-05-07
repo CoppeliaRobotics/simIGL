@@ -274,6 +274,35 @@
             </param>
         </return>
     </command>
+    <command name="adaptiveUpsample">
+        <description>Divide triangles with an edge longer than given threshold.</description>
+        <params>
+            <param name="m" type="mesh">
+                <description>mesh</description>
+            </param>
+            <param name="threshold" type="double">
+                <description>maximum triangle edge length</description>
+            </param>
+        </params>
+        <return>
+            <param name="m" type="mesh">
+                <description>list of tetrahedron volumes</description>
+            </param>
+        </return>
+    </command>
+    <command name="faceCentroids">
+        <description>Computes the centroid of mesh faces.</description>
+        <params>
+            <param name="m" type="mesh">
+                <description>mesh</description>
+            </param>
+        </params>
+        <return>
+            <param name="c" type="grid" item-type="double" size="*,3">
+                <description>centroid coordinates</description>
+            </param>
+        </return>
+    </command>
     <struct name="mesh">
         <param name="vertices" type="table" item-type="double">
             <description>vertices of the mesh (3 * n values)</description>

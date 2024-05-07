@@ -270,6 +270,58 @@ public:
         writeMesh(NV, NF, out->m);
     }
 
+    static void divideTriangle(Vector3d va, Vector3d vb, Vector3d vc, int ia, int ib, int ic, double thres, std::vector<double> &newV, std::vector<int> &newF)
+    {
+        double lab = (va - vb).norm();
+        double lac = (va - vc).norm();
+        double lbc = (vb - vc).norm();
+        double lmax = std::max(lab, std::max(lac, lbc));
+        if(lmax < thres)
+        {
+            newF.push_back(ia);
+            newF.push_back(ib);
+            newF.push_back(ic);
+            return;
+        }
+        if(lbc == lmax) { std::swap(va, vc); std::swap(ia, ic); }
+        else if(lac == lmax) { std::swap(vb, vc); std::swap(ib, ic); }
+        Vector3d vab = (va + vb) / 2;
+        int iab = newV.size() / 3;
+        newV.push_back(vab.x());
+        newV.push_back(vab.y());
+        newV.push_back(vab.z());
+        divideTriangle(va, vab, vc, ia, iab, ic, thres, newV, newF);
+        divideTriangle(vab, vb, vc, iab, ib, ic, thres, newV, newF);
+    }
+
+    void adaptiveUpsample(adaptiveUpsample_in *in, adaptiveUpsample_out *out)
+    {
+        MatrixXd V, NV;
+        MatrixXi F, NF;
+        readMesh(V, F, in->m);
+        std::vector<double> newV;
+        std::vector<int> newF;
+        for(int i = 0; i < V.rows(); i++)
+            for(int j = 0; j < 3; j++)
+                newV.push_back(V(i, j));
+
+        for(int i = 0; i < F.rows(); i++) {
+            int ia = F(i, 0), ib = F(i, 1), ic = F(i, 2);
+            Vector3d va = V.row(ia), vb = V.row(ib), vc = V.row(ic);
+            divideTriangle(va, vb, vc, ia, ib, ic, in->threshold, newV, newF);
+        }
+
+        NV.resize(newV.size() / 3, 3);
+        NF.resize(newF.size() / 3, 3);
+        for(int i = 0, iV = 0; i < newV.size(); i += 3, iV++)
+            for(int j = 0; j < 3; j++)
+                NV(iV, j) = newV[i + j];
+        for(int i = 0, iF = 0; i < newF.size(); i += 3, iF++)
+            for(int j = 0; j < 3; j++)
+                NF(iF, j) = newF[i + j];
+        writeMesh(NV, NF, out->m);
+    }
+
     void centroid(centroid_in *in, centroid_out *out)
     {
         MatrixXd V;
@@ -342,6 +394,18 @@ public:
         VectorXd vol;
         igl::volume(V, T, vol);
         writeVector(vol, out->vol);
+    }
+
+    void faceCentroids(faceCentroids_in *in, faceCentroids_out *out)
+    {
+        MatrixXd V, C;
+        MatrixXi F;
+        readMesh(V, F, in->m);
+        C.resize(F.rows(), 3);
+        for(int i = 0; i < F.rows(); i++)
+            for(int j = 0; j < 3; j++)
+                C(i, j) = (V(F(i, 0), j) + V(F(i, 1), j) + V(F(i, 2), j)) / 3.;
+        writeGrid(C, out->c);
     }
 };
 
