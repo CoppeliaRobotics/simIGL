@@ -136,6 +136,36 @@ function simIGL.rayTest(origin, points, proximitySensorHandle)
     return result
 end
 
+-- @fun drawMesh draw a mesh using drawing objects
+-- @arg table mesh the mesh data, as returned by simIGL.getMesh
+-- @arg table opts various options (color: table3, lineWidth: int, offset: table3, dwo: int or nil, it will be created)
+-- @ret table dwo the drawing object that has been used to draw
+function simIGL.drawMesh(mesh, opts)
+    opts = opts or {}
+    opts.color = opts.color or {0, 0, 1}
+    opts.lineWidth = opts.lineWidth or 2
+    opts.offset = opts.offset or {0, 0, 0}
+
+    local V = Matrix(-1, 3, mesh.vertices)
+    local F = Matrix(-1, 3, mesh.indices)
+    local offset = Vector(opts.offset):t()
+
+    if opts.dwo == nil then
+        opts.dwo = sim.addDrawingObject(sim.drawing_lines, opts.lineWidth, 0, -1, #mesh.indices, opts.color)
+    end
+    if opts.dwo ~= false then
+        for i, tri in ipairs(F) do
+            for _, ij in ipairs{{1, 2}, {1, 3}, {2, 3}} do
+                local vi = V[tri[ij[1]] + 1] + offset
+                local vj = V[tri[ij[2]] + 1] + offset
+                sim.addDrawingObjectItem(opts.dwo, Matrix:horzcat(vi, vj):data())
+            end
+        end
+    end
+
+    return opts.dwo
+end
+
 (require 'simIGL-typecheck')(simIGL)
 
 return simIGL
