@@ -40,7 +40,7 @@ function sysCall_nonSimulation()
                 event.point = pt
                 if currentFlags().surfaceNormal then
                     event.normal = n
-                    event.pointNormalMatrix = pointNormalToMatrix(pt, n)
+                    event.pointNormalMatrix = simIGL.pointNormalToMatrix(pt, n)
                 end
             end
             if (currentFlags().vertex or currentFlags().triangle) and sim.getObjectType(o) ==
@@ -58,7 +58,7 @@ function sysCall_nonSimulation()
                     local p1, p2, p3 = Vector(table.slice(tc, 1, 3)), Vector(table.slice(tc, 4, 6)), Vector(table.slice(tc, 7, 9))
                     local n = (p2 - p1):cross(p3 - p1):normalized():data()
                     event.normal = n
-                    event.pointNormalMatrix = pointNormalToMatrix(vc, n)
+                    event.pointNormalMatrix = simIGL.pointNormalToMatrix(vc, n)
                     normalOrig = vc
                 end
             end
@@ -277,7 +277,7 @@ function rayCast(orig, dir)
         sim.proximitysensor_ray_subtype, 16, 1, {3, 3, 2, 2, 1, 1, 0, 0},
         {0, 2000, 0.01, 0.01, 0.01, 0.01, 0, 0, 0, 0, 0, 0, 0.01, 0, 0}
     )
-    local m = pointNormalToMatrix(orig, dir)
+    local m = simIGL.pointNormalToMatrix(orig, dir)
     sim.setObjectMatrix(sensor, m)
     local coll = allVisibleObjectsColl({sim.object_shape_type, sim.object_octree_type})
     local r, d, pt, o, n = sim.checkProximitySensor(sensor, coll)
@@ -295,7 +295,7 @@ function rayCastDummies(orig, dir)
         sim.proximitysensor_cone_subtype, 16, 1, {3, 3, 2, 2, 1, 1, 0, 0},
         {0, 2000, 0.01, 0.01, 0.01, 0.01, 0, 0, 0, a, 0, 0, 0.01, 0, 0}
     )
-    local m = pointNormalToMatrix(orig, dir)
+    local m = simIGL.pointNormalToMatrix(orig, dir)
     sim.setObjectMatrix(sensor, m)
     local coll = allVisibleObjectsColl({sim.object_dummy_type})
     local r, d, pt, o, n = sim.checkProximitySensor(sensor, coll)
@@ -364,27 +364,6 @@ function allVisibleObjectsColl(types)
         end
     end
     return coll
-end
-
-function pointNormalToMatrix(pt, n)
-    local m = sim.buildIdentityMatrix()
-    m[4] = pt[1]
-    m[8] = pt[2]
-    m[12] = pt[3]
-    if n[1] < 0.99 then
-        local z = Vector3(n)
-        local x = Vector3({1, 0, 0})
-        local y = z:cross(x):normalized()
-        local x = y:cross(z)
-        m[1] = x[1]; m[5] = x[2]; m[9] = x[3];
-        m[2] = y[1]; m[6] = y[2]; m[10] = y[3];
-        m[3] = z[1]; m[7] = z[2]; m[11] = z[3];
-    else
-        m[1] = 0; m[5] = 1; m[9] = 0;
-        m[2] = 0; m[6] = 0; m[10] = 1;
-        m[3] = 1; m[7] = 0; m[11] = 0;
-    end
-    return m
 end
 
 function pointNormalToGlobal(pt, n, m)

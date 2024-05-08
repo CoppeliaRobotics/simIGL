@@ -6,6 +6,7 @@ end
 
 function sysCall_init()
     simUI = require 'simUI'
+    simIGL = require 'simIGL'
     if sim.getSimulationState() ~= sim.simulation_stopped then return {cmd = 'cleanup'} end
     sim.addLog(
         sim.verbosity_scriptinfos,
@@ -92,39 +93,6 @@ function sysCall_beforeInstanceSwitch()
     return {cmd = 'cleanup'}
 end
 
-function pointNormalToMatrix(pt, n)
-    local m = sim.buildIdentityMatrix()
-    m[4] = pt[1]
-    m[8] = pt[2]
-    m[12] = pt[3]
-    if n[1] < 0.99 then
-        local z = Vector3(n)
-        local x = Vector3({1, 0, 0})
-        local y = z:cross(x):normalized()
-        local x = y:cross(z)
-        m[1] = x[1]
-        m[5] = x[2]
-        m[9] = x[3]
-        m[2] = y[1]
-        m[6] = y[2]
-        m[10] = y[3]
-        m[3] = z[1]
-        m[7] = z[2]
-        m[11] = z[3]
-    else
-        m[1] = 0
-        m[5] = 1
-        m[9] = 0
-        m[2] = 0
-        m[6] = 0
-        m[10] = 1
-        m[3] = 1
-        m[7] = 0
-        m[11] = 0
-    end
-    return m
-end
-
 function getMidpoints(a, b)
     local d = b - a
     local n = simUI.getKeyboardModifiers().shift and
@@ -132,7 +100,7 @@ function getMidpoints(a, b)
     local midPoints = {}
     for i = 1, n do
         local midPoint = a + d * i / (n + 1)
-        table.insert(midPoints, pointNormalToMatrix(midPoint, d:normalized()))
+        table.insert(midPoints, simIGL.pointNormalToMatrix(midPoint, d))
     end
     return midPoints
 end
