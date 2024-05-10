@@ -303,6 +303,22 @@
             </param>
         </return>
     </command>
+    <command name="meshOctreeIntersection">
+        <description>Computes the part of mesh intersecting the given octree.</description>
+        <params>
+            <param name="m" type="mesh">
+                <description>mesh</description>
+            </param>
+            <param name="oc" type="int">
+                <description>handle of octree</description>
+            </param>
+        </params>
+        <return>
+            <param name="m" type="mesh">
+                <description>intersecting mesh subset</description>
+            </param>
+        </return>
+    </command>
     <struct name="mesh">
         <param name="vertices" type="table" item-type="double">
             <description>vertices of the mesh (3 * n values)</description>

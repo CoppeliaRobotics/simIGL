@@ -407,6 +407,54 @@ public:
                 C(i, j) = (V(F(i, 0), j) + V(F(i, 1), j) + V(F(i, 2), j)) / 3.;
         writeGrid(C, out->c);
     }
+
+    void meshOctreeIntersection(meshOctreeIntersection_in *in, meshOctreeIntersection_out *out)
+    {
+        MatrixXd V, NV;
+        MatrixXi F, NF;
+        readMesh(V, F, in->m);
+        std::vector<double> newV;
+        std::vector<int> newF;
+        for(int fi = 0; fi < F.rows(); fi++)
+        {
+            std::vector<Vector3d> v {
+                V.row(F(fi, 0)),
+                V.row(F(fi, 1)),
+                V.row(F(fi, 2)),
+            };
+            auto tn = (v[0] - v[1]).cross(v[0] - v[2]).normalized();
+            std::vector<double> pts;
+            for(const auto &vi : v)
+            {
+                pts.push_back(vi.x());
+                pts.push_back(vi.y());
+                pts.push_back(vi.z());
+            }
+            if(0 < sim::checkOctreePointOccupancy(in->oc, 0, pts))
+            {
+                for(int k = -1; k <= 1; k += 2)
+                {
+                    for(const auto &vi : v)
+                    {
+                        newF.push_back(newV.size() / 3);
+                        auto vo = vi + tn * k * 0.001;
+                        newV.push_back(vo.x());
+                        newV.push_back(vo.y());
+                        newV.push_back(vo.z());
+                    }
+                }
+            }
+        }
+        NV.resize(newV.size() / 3, 3);
+        NF.resize(newF.size() / 3, 3);
+        for(int i = 0, iV = 0; i < newV.size(); i += 3, iV++)
+            for(int j = 0; j < 3; j++)
+                NV(iV, j) = newV[i + j];
+        for(int i = 0, iF = 0; i < newF.size(); i += 3, iF++)
+            for(int j = 0; j < 3; j++)
+                NF(iF, j) = newF[i + j];
+        writeMesh(NV, NF, out->m);
+    }
 };
 
 SIM_PLUGIN(Plugin)
