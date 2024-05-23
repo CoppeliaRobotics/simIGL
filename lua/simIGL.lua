@@ -21,7 +21,7 @@ function simIGL.meshBooleanShape(handles, op)
     local result = simIGL.meshBoolean(meshes[1], meshes[2], op)
     for i = 3, #meshes do result = simIGL.meshBoolean(result, meshes[i], op) end
     if #result.vertices == 0 then return end
-    result = sim.createMeshShape(1, 0, result.vertices, result.indices)
+    result = sim.createShape(1, 0, result.vertices, result.indices)
     sim.setShapeAppearance(result, sim.getShapeAppearance(handles[1]))
     sim.reorientShapeBoundingBox(result, sim.handle_world)
     return result
@@ -63,7 +63,7 @@ function simIGL.convexHullShape(handles)
     end
     if #vert == 0 then error('empty input') end
     local m = simIGL.convexHull(vert)
-    local h = sim.createMeshShape(1, 0, m.vertices, m.indices)
+    local h = sim.createShape(1, 0, m.vertices, m.indices)
     sim.setShapeAppearance(h, app)
     return h
 end
