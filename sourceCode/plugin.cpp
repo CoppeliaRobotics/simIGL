@@ -119,6 +119,26 @@ public:
                 g.data.push_back(m.coeff(i, j));
     }
 
+    void writeGrid(const Eigen::VectorXi &v, Grid<int> &g)
+    {
+        g.dims.clear();
+        g.dims.push_back(v.size());
+        g.dims.push_back(1);
+        g.data.clear();
+        for(int i = 0; i < v.size(); i++)
+            g.data.push_back(v(i));
+    }
+
+    void writeGrid(const Eigen::RowVectorXi &v, Grid<int> &g)
+    {
+        g.dims.clear();
+        g.dims.push_back(1);
+        g.dims.push_back(v.size());
+        g.data.clear();
+        for(int i = 0; i < v.size(); i++)
+            g.data.push_back(v(i));
+    }
+
     template<typename T>
     void readVector(Matrix<T, Dynamic, 1> &m, const std::vector<T> &v)
     {
@@ -231,7 +251,8 @@ public:
 
     void uniqueEdgeMap(uniqueEdgeMap_in *in, uniqueEdgeMap_out *out)
     {
-        MatrixXi F, E, uE, EMAP, uEC, uEE;
+        MatrixXi F, E, uE;
+        Eigen::VectorXi EMAP, uEC, uEE;
         readGrid(F, in->f);
         igl::unique_edge_map(F, E, uE, EMAP, uEC, uEE);
         writeGrid(E, out->e);
