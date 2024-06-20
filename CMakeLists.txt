@@ -4,6 +4,7 @@ project(simIGL)
 find_package(Boost REQUIRED COMPONENTS system)
 
 list(PREPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(LIBIGL_INSTALL OFF)
 include(libigl)
 igl_include(copyleft cgal)
 igl_include(copyleft tetgen)
