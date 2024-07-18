@@ -17,7 +17,7 @@ function sysCall_init()
     end
 
     for i, h in ipairs(sel) do
-        if sim.getObjectType(h) ~= sim.object_shape_type then
+        if sim.getObjectType(h) ~= sim.sceneobject_shape then
             simUI.msgBox(
                 simUI.msgbox_type.critical, simUI.msgbox_buttons.ok, 'Mesh boolean add-on',
                 'This tool only works with shapes.'

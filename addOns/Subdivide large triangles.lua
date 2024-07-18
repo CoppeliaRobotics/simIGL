@@ -11,7 +11,7 @@ function sysCall_init()
     sel = sim.getObjectSel()
     if #sel > 0 then
         for _, h in ipairs(sel) do
-            if sim.getObjectType(h) ~= sim.object_shape_type then
+            if sim.getObjectType(h) ~= sim.sceneobject_shape then
                 error 'Can only operate on shape objects'
             end
         end

@@ -46,11 +46,11 @@ function simIGL.convexHullShape(handles)
     for i, h in ipairs(handles) do
         local toadd = {}
         local t = sim.getObjectType(h)
-        if t == sim.object_shape_type then
+        if t == sim.sceneobject_shape then
             app = sim.getShapeAppearance(h)
             local m = simIGL.getMesh(h)
             toadd = m.vertices
-        elseif t == sim.object_dummy_type then
+        elseif t == sim.sceneobject_dummy then
             toadd = sim.getObjectPosition(h, sim.handle_world)
         else
             error('unsupported object type')
@@ -104,7 +104,7 @@ function simIGL.rayTest(origin, points, proximitySensorHandle)
         local zoffset = 0
         local zrange = 10
         proximitySensorHandle = sim.createProximitySensor(
-            sim.proximitysensor_ray_subtype, 16, 0
+            sim.proximitysensor_ray, 16, 0
             +1 -- the sensor will be explicitly handled
             +4 -- the detection volume is not shown
             , {0, 0, 0, 0, 0, 0, 0, 0}

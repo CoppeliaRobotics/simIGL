@@ -44,7 +44,7 @@ function sysCall_nonSimulation()
                 end
             end
             if (currentFlags().vertex or currentFlags().triangle) and sim.getObjectType(o) ==
-                sim.object_shape_type then
+                sim.sceneobject_shape then
                 ti, vi, tc, vc = getTriangleAndVertexInfo(pt, n, o)
                 if currentFlags().triangle and ti then
                     event.triangleIndex = ti
@@ -274,12 +274,12 @@ end
 
 function rayCast(orig, dir)
     local sensor = sim.createProximitySensor(
-        sim.proximitysensor_ray_subtype, 16, 1, {3, 3, 2, 2, 1, 1, 0, 0},
+        sim.proximitysensor_ray, 16, 1, {3, 3, 2, 2, 1, 1, 0, 0},
         {0, 2000, 0.01, 0.01, 0.01, 0.01, 0, 0, 0, 0, 0, 0, 0.01, 0, 0}
     )
     local m = simIGL.pointNormalToMatrix(orig, dir)
     sim.setObjectMatrix(sensor, m)
-    local coll = allVisibleObjectsColl({sim.object_shape_type, sim.object_octree_type})
+    local coll = allVisibleObjectsColl({sim.sceneobject_shape, sim.sceneobject_octree})
     local r, d, pt, o, n = sim.checkProximitySensor(sensor, coll)
     sim.destroyCollection(coll)
     sim.removeObjects({sensor})
@@ -292,12 +292,12 @@ end
 function rayCastDummies(orig, dir)
     local a = 3 * math.pi / 180
     local sensor = sim.createProximitySensor(
-        sim.proximitysensor_cone_subtype, 16, 1, {3, 3, 2, 2, 1, 1, 0, 0},
+        sim.proximitysensor_cone, 16, 1, {3, 3, 2, 2, 1, 1, 0, 0},
         {0, 2000, 0.01, 0.01, 0.01, 0.01, 0, 0, 0, a, 0, 0, 0.01, 0, 0}
     )
     local m = simIGL.pointNormalToMatrix(orig, dir)
     sim.setObjectMatrix(sensor, m)
-    local coll = allVisibleObjectsColl({sim.object_dummy_type})
+    local coll = allVisibleObjectsColl({sim.sceneobject_dummy})
     local r, d, pt, o, n = sim.checkProximitySensor(sensor, coll)
     sim.destroyCollection(coll)
     sim.removeObjects({sensor})
