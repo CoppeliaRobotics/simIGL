@@ -65,7 +65,6 @@ function go()
         sim.setShapeColor(h, nil, sim.colorcomponent_ambient_diffuse, colad)
         sim.setShapeColor(h, nil, sim.colorcomponent_specular, colsp)
         sim.setShapeColor(h, nil, sim.colorcomponent_emission, colem)
-        sim.reorientShapeBoundingBox(h, sim.handle_world)
         sim.setObjectInt32Param(h, sim.shapeintparam_culling, culling)
         table.insert(result, h)
     end

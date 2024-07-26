@@ -23,7 +23,8 @@ function simIGL.meshBooleanShape(handles, op)
     if #result.vertices == 0 then return end
     result = sim.createShape(1, 0, result.vertices, result.indices)
     sim.setShapeAppearance(result, sim.getShapeAppearance(handles[1]))
-    sim.reorientShapeBoundingBox(result, sim.handle_world)
+    sim.alignShapeBB(result, {0, 0, 0, 0, 0, 0, 1})
+    sim.relocateShapeFrame(result, {0, 0, 0, 0, 0, 0, 0})
     return result
 end
 
