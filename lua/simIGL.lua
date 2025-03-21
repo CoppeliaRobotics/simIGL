@@ -2,7 +2,7 @@ local simIGL = loadPlugin 'simIGL';
 
 -- @fun getMesh get mesh data of a given shape in the format used by simIGL functions
 -- @arg int h the handle of the shape
--- @arg {type=table,default={}} options options
+-- @arg {type='table',default={}} options options
 -- @ret table mesh mesh object
 function simIGL.getMesh(h, options)
     local v, i, n = sim.getShapeMesh(h)
@@ -97,7 +97,7 @@ end
 -- @fun rayTest perform a ray test, from given origin towards every of the points, and return a new array of points.
 -- @arg table origin (3D vector)
 -- @arg table points one or more points to test
--- @arg {type=int,nullable=true,default=NIL} proximitySensorHandle handle of a ray type proximity sensor, or nil in which case it will be created
+-- @arg {type='int',nullable=true,default='NIL'} proximitySensorHandle handle of a ray type proximity sensor, or nil in which case it will be created
 -- @ret table resultPoints the resulting points of the ray test
 function simIGL.rayTest(origin, points, proximitySensorHandle)
     local removeSensor = false
