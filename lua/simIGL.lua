@@ -97,7 +97,7 @@ end
 -- @fun rayTest perform a ray test, from given origin towards every of the points, and return a new array of points.
 -- @arg table origin (3D vector)
 -- @arg table points one or more points to test
--- @arg {type='int',nullable=true,default='NIL'} proximitySensorHandle handle of a ray type proximity sensor, or nil in which case it will be created
+-- @arg {type='int',nullable=true,default_nil=true} proximitySensorHandle handle of a ray type proximity sensor, or nil in which case it will be created
 -- @ret table resultPoints the resulting points of the ray test
 function simIGL.rayTest(origin, points, proximitySensorHandle)
     local removeSensor = false
