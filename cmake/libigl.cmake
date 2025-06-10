@@ -6,7 +6,7 @@ include(FetchContent)
 FetchContent_Declare(
     libigl
     GIT_REPOSITORY https://github.com/libigl/libigl.git
-    GIT_TAG v2.5.0
+    GIT_TAG v2.6.0
     #EXCLUDE_FROM_ALL # only available in CMake 3.28+
 )
 #FetchContent_MakeAvailable(libigl) # CMake 3.28+
