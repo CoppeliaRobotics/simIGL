@@ -1,4 +1,5 @@
-local simIGL = loadPlugin 'simIGL';
+local simIGL = loadPlugin 'simIGL'
+local sim = require 'sim-1'
 
 -- @fun getMesh get mesh data of a given shape in the format used by simIGL functions
 -- @arg int h the handle of the shape

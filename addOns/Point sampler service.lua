@@ -1,4 +1,6 @@
-sim = require 'sim'
+local sim = require 'sim'
+local simUI
+local simIGL
 
 function sysCall_info()
     return {

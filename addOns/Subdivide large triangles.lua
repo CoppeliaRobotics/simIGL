@@ -1,4 +1,5 @@
-sim = require 'sim'
+local sim = require 'sim'
+local simUI
 
 function sysCall_info()
     return {autoStart = false, menu = 'Geometry / Mesh\nSubdivide large triangles...'}
@@ -50,7 +51,7 @@ function abort()
 end
 
 function go()
-    simIGL = require 'simIGL'
+    local simIGL = require 'simIGL'
     local threshold = simUI.getSpinboxValue(ui, 2)
     local result = {}
     for _, h in ipairs(sel) do

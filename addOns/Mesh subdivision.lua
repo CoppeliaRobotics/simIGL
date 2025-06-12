@@ -1,8 +1,7 @@
-sim = require 'sim'
-
 function sysCall_init()
-    simUI = require 'simUI'
-    simIGL = require 'simIGL'
+    local sim = require 'sim'
+    local simUI = require 'simUI'
+    local simIGL = require 'simIGL'
     local sel = sim.getObjectSel()
     if #sel ~= 1 or sim.getObjectType(sel[1]) ~= sim.sceneobject_shape then
         simUI.msgBox(

@@ -1,8 +1,7 @@
-sim = require 'sim'
-
 function sysCall_init()
-    simIGL = require 'simIGL'
-    simUI = require 'simUI'
+    local sim = require 'sim-1'
+    local simIGL = require 'simIGL'
+    local simUI = require 'simUI'
 
     local maxSel = 2
     if type(acceptsMoreThan2) == 'function' and acceptsMoreThan2() then maxSel = 1 / 0 end
