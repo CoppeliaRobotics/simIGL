@@ -2,6 +2,9 @@ local sim = require 'sim'
 local simIGL
 local simUI
 
+local matrix = require 'matrix-2'
+local Vector = matrix.Vector
+
 function sysCall_info()
     return {autoStart = false, menu = 'Geometry / Mesh\nFind midpoint'}
 end

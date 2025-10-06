@@ -1,5 +1,8 @@
 local sim = require 'sim'
 
+local matrix = require 'matrix-2'
+local Vector = matrix.Vector
+
 function sysCall_info()
     return {autoStart = false, menu = 'Geometry / Mesh\nMeasure distance/direction'}
 end

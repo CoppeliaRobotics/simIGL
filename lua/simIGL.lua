@@ -1,6 +1,9 @@
 local simIGL = loadPlugin 'simIGL'
 local sim = require 'sim-1'
 
+local matrix = require 'matrix-2'
+local Vector, Matrix = matrix.Vector, matrix.Matrix
+
 -- @fun getMesh get mesh data of a given shape in the format used by simIGL functions
 -- @arg int h the handle of the shape
 -- @arg {type='table',default={}} options options
@@ -80,8 +83,8 @@ function simIGL.pointNormalToMatrix(point, normal)
     m[8] = point[2]
     m[12] = point[3]
     if normal[1] < 0.99 then
-        local z = Vector3(normal):normalized()
-        local x = Vector3({1, 0, 0})
+        local z = Vector(normal):normalized()
+        local x = Vector{1, 0, 0}
         local y = z:cross(x):normalized()
         local x = y:cross(z)
         m[1] = x[1]; m[5] = x[2]; m[9] = x[3];

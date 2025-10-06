@@ -2,6 +2,9 @@ local sim = require 'sim'
 local simUI
 local simIGL
 
+local matrix = require 'matrix-2'
+local Matrix, Vector = matrix.Matrix, matrix.Vector
+
 function sysCall_info()
     return {
         autoStart = not sim.getBoolParam(sim.boolparam_headless),
@@ -341,14 +344,17 @@ function getTriangleAndVertexInfo(pt, n, o)
     end
     local triangleIndex, vertexIndex = r[1], nil
     local tri = meshInfo[o].f[1 + triangleIndex]
-    local v = {meshInfo[o].v[1 + tri[1]], meshInfo[o].v[1 + tri[2]], meshInfo[o].v[1 + tri[3]]}
-    local dist = {(v[1] - pt):t():norm(), (v[2] - pt):t():norm(), (v[3] - pt):t():norm()}
+    local v, dist = {}, {}
+    for i = 1, 3 do
+        v[i] = meshInfo[o].v[1 + tri[i]]
+        dist[i] = (v[i] - pt):t():norm()
+    end
     if currentFlags().triangle and currentFlags().vertex then
         table.insert(dist, ((v[1] + v[2] + v[3]) / 3 - pt):t():norm())
     end
     local closest, d = nil, nil
     for i = 1, #dist do if not d or dist[i] < d then closest, d = i, dist[i] end end
-    local triangleCoords = Matrix:vertcat(unpack(v)):data()
+    local triangleCoords = Matrix:vertcat(table.unpack(v)):data()
     local vertexCoords = nil
     if closest ~= 4 then
         vertexIndex = tri[closest]
