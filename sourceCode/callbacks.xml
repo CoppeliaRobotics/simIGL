@@ -274,6 +274,19 @@
             </param>
         </return>
     </command>
+    <command name="boundaryFacets">
+        <description>Compute the boundary facets of a given tet mesh.</description>
+        <params>
+            <param name="m" type="tetmesh">
+                <description>tet mesh</description>
+            </param>
+        </params>
+        <return>
+            <param name="m" type="mesh">
+                <description>result mesh</description>
+            </param>
+        </return>
+    </command>
     <command name="adaptiveUpsample">
         <description>Divide triangles with an edge longer than given threshold.</description>
         <params>

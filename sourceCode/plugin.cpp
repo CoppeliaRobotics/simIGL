@@ -12,6 +12,7 @@
 #include <igl/copyleft/cgal/convex_hull.h>
 #include <igl/copyleft/cgal/intersect_with_half_space.h>
 #include <igl/volume.h>
+#include <igl/boundary_facets.h>
 #include <simPlusPlus/Plugin.h>
 #include "config.h"
 #include "plugin.h"
@@ -415,6 +416,16 @@ public:
         VectorXd vol;
         igl::volume(V, T, vol);
         writeVector(vol, out->vol);
+    }
+
+    void boundaryFacets(boundaryFacets_in *in, boundaryFacets_out *out)
+    {
+        MatrixXd V;
+        MatrixXi T;
+        readTetMesh(V, T, in->m);
+        MatrixXi SF;
+        igl::boundary_facets(T, SF);
+        writeMesh(V, SF, out->m);
     }
 
     void faceCentroids(faceCentroids_in *in, faceCentroids_out *out)
