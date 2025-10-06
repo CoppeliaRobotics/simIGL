@@ -18,7 +18,7 @@ function sysCall_init()
     ui = simUI.create [[<ui closeable="false" title="Translate to align vertex add-on">
         <label id="1" text="1) Select a shape to translate" />
         <label id="2" text="2) Select first vertex" />
-        <label id="3" text="3) Select second vertex" />
+        <label id="3" text="3) Select second vertex or dummy" />
         <button text="Abort" on-click="abort" />
     </ui>]]
     phase = 1
@@ -56,11 +56,12 @@ function sysCall_msg(event)
             updateUi()
             sim.broadcastMsg {
                 id = 'pointSampler.setFlags',
-                data = {key = 'translateToAlignVertex', arrowSource = firstVertex},
+                data = {key = 'translateToAlignVertex', arrowSource = firstVertex, dummy = true},
             }
         elseif phase == 3 then
+            local v = event.data.dummy and sim.getObjectPosition(event.data.dummy) or event.data.vertexCoords
             local p = sim.getObjectPosition(targetObject)
-            p = Vector(p) + Vector(event.data.vertexCoords) - Vector(firstVertex)
+            p = Vector(p) + Vector(v) - Vector(firstVertex)
             sim.setObjectPosition(targetObject, p:data())
             sim.announceSceneContentChange()
             return {cmd = 'cleanup'}
