@@ -82,6 +82,19 @@ public:
                 T(i, j) = m.indices.at(k++);
     }
 
+    void writeTetMesh(const MatrixXd &V, const MatrixXi &T, tetmesh &m)
+    {
+        m.vertices.clear();
+        for(size_t i = 0; i < V.rows(); i++)
+            for(size_t j = 0; j < V.cols(); j++)
+                m.vertices.push_back(V(i, j));
+
+        m.indices.clear();
+        for(size_t i = 0; i < T.rows(); i++)
+            for(size_t j = 0; j < T.cols(); j++)
+                m.indices.push_back(T(i, j));
+    }
+
     template<typename T>
     void readGrid(Matrix<T, Dynamic, Dynamic> &m, const Grid<T> &g)
     {
@@ -370,8 +383,7 @@ public:
         MatrixXi F, TT, TF;
         readMesh(V, F, in->m);
         out->result = igl::copyleft::tetgen::tetrahedralize(V, F, in->switches, TV, TT, TF);
-        writeGrid(TV, out->tv);
-        writeGrid(TT, out->tt);
+        writeTetMesh(TV, TT, out->m);
         writeGrid(TF, out->tf);
     }
 

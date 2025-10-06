@@ -215,14 +215,11 @@
             <param name="result" type="int">
                 <description>Returns status: 0 success; 1 tetgen threw exception; 2 tetgen did not crash but could not create any tets (probably there are holes, duplicate faces etc.); -1 other error</description>
             </param>
-            <param name="tv" type="grid" item-type="double" size="*,3">
-                <description>vertex position list</description>
-            </param>
-            <param name="tt" type="grid" item-type="int" size="*,4">
-                <description>list of tet face indices</description>
+            <param name="m" type="tetmesh">
+                <description>tet mesh</description>
             </param>
             <param name="tf" type="grid" item-type="int" size="*,3">
-                <description>list of triangle face indices</description>
+                <description>surface triangles (indices into tetmesh's vertices)</description>
             </param>
         </return>
     </command>
