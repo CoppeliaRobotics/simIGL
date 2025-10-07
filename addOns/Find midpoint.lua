@@ -15,7 +15,7 @@ function sysCall_init()
     if sim.getSimulationState() ~= sim.simulation_stopped then return {cmd = 'cleanup'} end
     sim.addLog(
         sim.verbosity_scriptinfos,
-        "This tool finds midpoint between two objects (start the addon with the two objects selected) or between two points (first clicked vertex/dummy and second clicked vertex/dummy). Hold shift to create two evenly spaced midpoints. Use sim.setNamedInt32Param('findMidpoint.n',3) to change the number of midpoints created when shift is held to e.g. 3."
+        "This tool finds midpoint between two objects (start the addon with the two objects selected) or between two points (first clicked vertex/dummy and second clicked vertex/dummy). Hold shift to create two evenly spaced midpoints. Use sim.setIntProperty(sim.handle_app, 'signal.findMidpoint.n', 3) to change the number of midpoints created when shift is held to e.g. 3."
     )
 
     -- start with two objects selected to compute the midpoint between those two
@@ -81,8 +81,7 @@ function sysCall_msg(event)
     elseif event.id == 'pointSampler.hover' and firstPoint then
         sim.addDrawingObjectItem(pts, nil)
         local p = Vector(point)
-        local n = simUI.getKeyboardModifiers().shift and
-                      math.max(1, sim.getNamedInt32Param('findMidpoint.n') or 2) or 1
+        local n = simUI.getKeyboardModifiers().shift and math.max(1, sim.getIntProperty(sim.handle_app, 'signal.findMidpoint.n', {noError = true}) or 2) or 1
         local sz = math.min(0.01, (p - firstPoint):norm() / n / 4)
         for i, m in ipairs(getMidpoints(firstPoint, p)) do
             sim.addDrawingObjectItem(pts, {m[4], m[8], m[12], sz})
@@ -100,8 +99,7 @@ end
 
 function getMidpoints(a, b)
     local d = b - a
-    local n = simUI.getKeyboardModifiers().shift and
-                  math.max(1, sim.getNamedInt32Param('findMidpoint.n') or 2) or 1
+    local n = simUI.getKeyboardModifiers().shift and math.max(1, sim.getIntProperty(sim.handle_app, 'signal.findMidpoint.n', {noError = true}) or 2) or 1
     local midPoints = {}
     for i = 1, n do
         local midPoint = a + d * i / (n + 1)
