@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16.3)
 project(simIGL)
 
-find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost REQUIRED)
 
 list(PREPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(LIBIGL_INSTALL OFF)
