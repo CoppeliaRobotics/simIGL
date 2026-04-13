@@ -13,7 +13,7 @@
 #include <igl/copyleft/cgal/intersect_with_half_space.h>
 #include <igl/volume.h>
 #include <igl/boundary_facets.h>
-#include <simPlusPlus/Plugin.h>
+#include <simPlusPlus-2/Plugin.h>
 #include "config.h"
 #include "plugin.h"
 #include "stubs.h"
