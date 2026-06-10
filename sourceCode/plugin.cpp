@@ -28,9 +28,6 @@ public:
     {
         if(!registerScriptStuff())
             throw runtime_error("failed to register script stuff");
-
-        setExtVersion("IGL Plugin");
-        setBuildDate(BUILD_DATE);
     }
 
     void readMesh(MatrixXd &V, MatrixXi &F, const mesh &m)
